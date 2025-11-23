@@ -1,0 +1,541 @@
+[linear_algebra_html.html](https://github.com/user-attachments/files/23698738/linear_algebra_html.html)
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Álgebra Lineal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .header svg {
+            width: 50px;
+            height: 50px;
+            color: #667eea;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2em;
+        }
+
+        .topics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .topic-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .topic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .topic-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        textarea, input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 300px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow: auto;
+            color: #333;
+        }
+
+        .operations {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .calc-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            font-size: 14px;
+        }
+
+        .calc-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .calc-btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .btn-blue { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .btn-purple { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; }
+        .btn-pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .btn-orange { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .btn-red { background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); }
+        .btn-teal { background: linear-gradient(135deg, #13547a 0%, #80d0c7 100%); }
+        .btn-cyan { background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%); }
+        .btn-indigo { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .btn-emerald { background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%); }
+        .btn-violet { background: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%); }
+
+        .guide {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .guide h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .guide p {
+            margin: 10px 0;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .input-section {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+                <line x1="8" y1="12" x2="16" y2="12"/>
+                <line x1="12" y1="8" x2="12" y2="16"/>
+            </svg>
+            <h1>Calculadora de Álgebra Lineal</h1>
+        </div>
+
+        <div class="topics">
+            <button class="topic-btn active" onclick="selectTopic('matrices')">Matrices</button>
+            <button class="topic-btn" onclick="selectTopic('determinants')">Determinantes</button>
+            <button class="topic-btn" onclick="selectTopic('vectors')">Vectores</button>
+            <button class="topic-btn" onclick="selectTopic('systems')">Sistemas</button>
+            <button class="topic-btn" onclick="selectTopic('eigenvalues')">Valores Propios</button>
+        </div>
+
+        <div class="input-section">
+            <div>
+                <div class="input-group">
+                    <label>Matriz A (filas en líneas nuevas, valores separados por coma)</label>
+                    <textarea id="matrixA" placeholder="1,2,3&#10;4,5,6&#10;7,8,9">1,2
+3,4</textarea>
+                </div>
+
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Matriz B / Vector B</label>
+                    <textarea id="matrixB" placeholder="1,2&#10;3,4">5,6
+7,8</textarea>
+                </div>
+
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Vector (valores separados por coma)</label>
+                    <input type="text" id="vector" placeholder="1,2,3" value="1,2,3">
+                </div>
+
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Escalar</label>
+                    <input type="text" id="scalar" placeholder="2" value="2">
+                </div>
+            </div>
+
+            <div>
+                <label>Resultado</label>
+                <div class="result-box" id="result">El resultado aparecerá aquí...</div>
+            </div>
+        </div>
+
+        <div id="operations" class="operations">
+            <!-- Buttons will be inserted here by JavaScript -->
+        </div>
+
+        <div class="guide">
+            <h2>📚 Guía de Uso</h2>
+            <p><strong>Matrices:</strong> Ingresa cada fila en una línea nueva, con valores separados por comas. Ejemplo: 1,2,3 (Enter) 4,5,6</p>
+            <p><strong>Vectores:</strong> Separa los componentes con comas. Ejemplo: 1,2,3</p>
+            <p><strong>Operaciones disponibles:</strong> Suma, resta, multiplicación de matrices, determinantes, inversas, valores propios, productos vectoriales, normalización, rango, forma escalonada reducida (RREF) y más.</p>
+            <p><strong>Nota:</strong> Los valores propios solo funcionan para matrices 2×2 con eigenvalores reales.</p>
+        </div>
+    </div>
+
+    <script>
+        let currentTopic = 'matrices';
+
+        const operations = {
+            matrices: [
+                { name: 'A + B', action: 'add', class: 'btn-green' },
+                { name: 'A - B', action: 'subtract', class: 'btn-blue' },
+                { name: 'A × B', action: 'multiply', class: 'btn-purple' },
+                { name: 'Escalar × A', action: 'scalar', class: 'btn-pink' },
+                { name: 'Transpuesta A', action: 'transpose', class: 'btn-indigo' }
+            ],
+            determinants: [
+                { name: 'Determinante', action: 'determinant', class: 'btn-orange' },
+                { name: 'Matriz Inversa', action: 'inverse', class: 'btn-red' },
+                { name: 'Rango', action: 'rank', class: 'btn-teal' }
+            ],
+            vectors: [
+                { name: 'Producto Punto', action: 'dot', class: 'btn-cyan' },
+                { name: 'Producto Cruz', action: 'cross', class: 'btn-blue' },
+                { name: 'Magnitud', action: 'magnitude', class: 'btn-green' },
+                { name: 'Normalizar', action: 'normalize', class: 'btn-purple' }
+            ],
+            systems: [
+                { name: 'Forma Escalonada Reducida', action: 'rref', class: 'btn-emerald' },
+                { name: 'Rango', action: 'rank', class: 'btn-teal' }
+            ],
+            eigenvalues: [
+                { name: 'Valores Propios (2×2)', action: 'eigenvalues', class: 'btn-violet' }
+            ]
+        };
+
+        function selectTopic(topic) {
+            currentTopic = topic;
+            document.querySelectorAll('.topic-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderOperations();
+        }
+
+        function renderOperations() {
+            const container = document.getElementById('operations');
+            container.innerHTML = '';
+            operations[currentTopic].forEach(op => {
+                const btn = document.createElement('button');
+                btn.className = `calc-btn ${op.class}`;
+                btn.textContent = op.name;
+                btn.onclick = () => calculate(op.action);
+                container.appendChild(btn);
+            });
+        }
+
+        function parseMatrix(str) {
+            return str.trim().split('\n').map(row => 
+                row.split(',').map(val => parseFloat(val.trim()))
+            );
+        }
+
+        function parseVector(str) {
+            return str.split(',').map(val => parseFloat(val.trim()));
+        }
+
+        function matrixToString(matrix) {
+            return matrix.map(row => row.map(v => v.toFixed(4)).join('\t')).join('\n');
+        }
+
+        function addMatrices(a, b) {
+            return a.map((row, i) => row.map((val, j) => val + b[i][j]));
+        }
+
+        function subtractMatrices(a, b) {
+            return a.map((row, i) => row.map((val, j) => val - b[i][j]));
+        }
+
+        function multiplyMatrices(a, b) {
+            const result = Array(a.length).fill(0).map(() => Array(b[0].length).fill(0));
+            for (let i = 0; i < a.length; i++) {
+                for (let j = 0; j < b[0].length; j++) {
+                    for (let k = 0; k < a[0].length; k++) {
+                        result[i][j] += a[i][k] * b[k][j];
+                    }
+                }
+            }
+            return result;
+        }
+
+        function scalarMultiply(matrix, scalar) {
+            return matrix.map(row => row.map(val => val * scalar));
+        }
+
+        function transpose(matrix) {
+            return matrix[0].map((_, i) => matrix.map(row => row[i]));
+        }
+
+        function determinant(matrix) {
+            const n = matrix.length;
+            if (n === 1) return matrix[0][0];
+            if (n === 2) return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0];
+            
+            let det = 0;
+            for (let j = 0; j < n; j++) {
+                const minor = matrix.slice(1).map(row => row.filter((_, i) => i !== j));
+                det += Math.pow(-1, j) * matrix[0][j] * determinant(minor);
+            }
+            return det;
+        }
+
+        function inverse(matrix) {
+            const n = matrix.length;
+            const det = determinant(matrix);
+            if (Math.abs(det) < 1e-10) return null;
+            
+            if (n === 2) {
+                return [
+                    [matrix[1][1] / det, -matrix[0][1] / det],
+                    [-matrix[1][0] / det, matrix[0][0] / det]
+                ];
+            }
+            
+            const adj = Array(n).fill(0).map(() => Array(n).fill(0));
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    const minor = matrix.filter((_, mi) => mi !== i).map(row => 
+                        row.filter((_, mj) => mj !== j)
+                    );
+                    adj[j][i] = Math.pow(-1, i + j) * determinant(minor);
+                }
+            }
+            return adj.map(row => row.map(val => val / det));
+        }
+
+        function dotProduct(a, b) {
+            return a.reduce((sum, val, i) => sum + val * b[i], 0);
+        }
+
+        function crossProduct(a, b) {
+            if (a.length !== 3 || b.length !== 3) return null;
+            return [
+                a[1] * b[2] - a[2] * b[1],
+                a[2] * b[0] - a[0] * b[2],
+                a[0] * b[1] - a[1] * b[0]
+            ];
+        }
+
+        function magnitude(v) {
+            return Math.sqrt(v.reduce((sum, val) => sum + val * val, 0));
+        }
+
+        function normalize(v) {
+            const mag = magnitude(v);
+            return v.map(val => val / mag);
+        }
+
+        function eigenvalues2x2(matrix) {
+            if (matrix.length !== 2 || matrix[0].length !== 2) return null;
+            const a = matrix[0][0];
+            const b = matrix[0][1];
+            const c = matrix[1][0];
+            const d = matrix[1][1];
+            
+            const trace = a + d;
+            const det = a * d - b * c;
+            const discriminant = trace * trace - 4 * det;
+            
+            if (discriminant < 0) return null;
+            
+            const lambda1 = (trace + Math.sqrt(discriminant)) / 2;
+            const lambda2 = (trace - Math.sqrt(discriminant)) / 2;
+            
+            return [lambda1, lambda2];
+        }
+
+        function rref(matrix) {
+            const m = matrix.map(row => [...row]);
+            const rows = m.length;
+            const cols = m[0].length;
+            let lead = 0;
+
+            for (let r = 0; r < rows; r++) {
+                if (lead >= cols) return m;
+                
+                let i = r;
+                while (Math.abs(m[i][lead]) < 1e-10) {
+                    i++;
+                    if (i === rows) {
+                        i = r;
+                        lead++;
+                        if (lead === cols) return m;
+                    }
+                }
+                
+                [m[i], m[r]] = [m[r], m[i]];
+                
+                const div = m[r][lead];
+                m[r] = m[r].map(val => val / div);
+                
+                for (let j = 0; j < rows; j++) {
+                    if (j !== r) {
+                        const mult = m[j][lead];
+                        m[j] = m[j].map((val, k) => val - mult * m[r][k]);
+                    }
+                }
+                lead++;
+            }
+            return m;
+        }
+
+        function rank(matrix) {
+            const r = rref(matrix);
+            return r.filter(row => row.some(val => Math.abs(val) > 1e-10)).length;
+        }
+
+        function calculate(operation) {
+            try {
+                let res = '';
+                const mA = parseMatrix(document.getElementById('matrixA').value);
+                const mB = parseMatrix(document.getElementById('matrixB').value);
+                const v = parseVector(document.getElementById('vector').value);
+                const s = parseFloat(document.getElementById('scalar').value);
+
+                switch (operation) {
+                    case 'add':
+                        res = matrixToString(addMatrices(mA, mB));
+                        break;
+                    case 'subtract':
+                        res = matrixToString(subtractMatrices(mA, mB));
+                        break;
+                    case 'multiply':
+                        res = matrixToString(multiplyMatrices(mA, mB));
+                        break;
+                    case 'scalar':
+                        res = matrixToString(scalarMultiply(mA, s));
+                        break;
+                    case 'transpose':
+                        res = matrixToString(transpose(mA));
+                        break;
+                    case 'determinant':
+                        res = `Determinante: ${determinant(mA).toFixed(4)}`;
+                        break;
+                    case 'inverse':
+                        const inv = inverse(mA);
+                        res = inv ? matrixToString(inv) : 'Matriz no invertible (determinante = 0)';
+                        break;
+                    case 'rref':
+                        res = matrixToString(rref(mA));
+                        break;
+                    case 'rank':
+                        res = `Rango: ${rank(mA)}`;
+                        break;
+                    case 'dot':
+                        const vB = parseVector(document.getElementById('matrixB').value.split('\n')[0]);
+                        res = `Producto punto: ${dotProduct(v, vB).toFixed(4)}`;
+                        break;
+                    case 'cross':
+                        const vB2 = parseVector(document.getElementById('matrixB').value.split('\n')[0]);
+                        const cross = crossProduct(v, vB2);
+                        res = cross ? `Producto cruz: [${cross.map(x => x.toFixed(4)).join(', ')}]` : 'Vectores deben ser 3D';
+                        break;
+                    case 'magnitude':
+                        res = `Magnitud: ${magnitude(v).toFixed(4)}`;
+                        break;
+                    case 'normalize':
+                        res = `Vector normalizado: [${normalize(v).map(x => x.toFixed(4)).join(', ')}]`;
+                        break;
+                    case 'eigenvalues':
+                        const eigs = eigenvalues2x2(mA);
+                        res = eigs ? `Valores propios:\nλ₁ = ${eigs[0].toFixed(4)}\nλ₂ = ${eigs[1].toFixed(4)}` : 'Solo para matrices 2×2 con valores propios reales';
+                        break;
+                    default:
+                        res = 'Operación no reconocida';
+                }
+                document.getElementById('result').textContent = res;
+            } catch (error) {
+                document.getElementById('result').textContent = `Error: ${error.message}`;
+            }
+        }
+
+        // Initialize
+        renderOperations();
+    </script>
+</body>
+</html>
